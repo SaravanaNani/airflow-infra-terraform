@@ -1,0 +1,6 @@
+project_id    = "your-gcp-project-id"
+region        = "us-central1"
+vm_name       = "airflow-prod-vm"
+machine_type  = "e2-medium"
+zone          = "us-central1-a"
+vm_image      = "debian-cloud/debian-11"
