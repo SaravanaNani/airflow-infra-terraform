@@ -61,7 +61,7 @@ chown -R 50000:50000 /opt/airflow
 
 # Fetch service account key
 echo "Fetching service account key..."
-gcloud secrets versions access latest --secret="$SA_KEY_SECRET_ID" | base64 -d > /opt/airflow/secrets/sa-key.json
+gcloud secrets versions access latest --secret="$SA_KEY_SECRET_ID" > /opt/airflow/secrets/sa-key.json
 chown 50000:50000 /opt/airflow/secrets/sa-key.json
 # Write docker-compose.yaml
 echo "Creating docker-compose.yaml..."
