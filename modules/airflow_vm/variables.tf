@@ -23,3 +23,7 @@ variable "sa_key_secret_id" {
   description = "Secret Manager secret ID for the service account key"
   type        = string
 }
+variable "vm_disk_size_gb" {
+  description = "Boot disk size for the Airflow VM, in GB"
+  type        = number
+}
