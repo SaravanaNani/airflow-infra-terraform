@@ -47,6 +47,7 @@ module "sql_instance" {
 }
 
 
+
 module "gcs_bucket" {
   source      = "./modules/gcs_bucket"
   project_id  = var.project_id
@@ -65,9 +66,8 @@ module "airflow_vm" {
   sa_name               = var.sa_name
   sql_connection_name   = module.sql_instance.connection_name
   bucket_name           = var.bucket_name
-  sa_key_secret_id      = module.service_account.sa_key_secret_id 
+  sa_key_secret_id      = module.service_account.sa_key_secret_id
   db_password_secret_id = module.sql_instance.db_password_secret_id
   db_username_secret_id = module.sql_instance.db_username_secret_id
-
-
+  vm_disk_size_gb       = var.vm_disk_size_gb
 }
