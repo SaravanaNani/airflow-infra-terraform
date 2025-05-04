@@ -92,3 +92,7 @@ variable "db_user" {
   description = "Database username"
   type        = string
 }
+variable "vm_disk_size_gb" {
+  description = "Boot disk size for the Airflow VM, in GB"
+  type        = number
+}
