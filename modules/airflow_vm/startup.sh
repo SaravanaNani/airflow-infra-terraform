@@ -148,6 +148,12 @@ services:
           echo '--- [$(date)] Starting DAG sync ---' >> /opt/airflow/logs/dag-sync.log;
           gsutil -m rsync -r gs://${GCS_BUCKET}/dags/ /opt/airflow/dags >> /opt/airflow/logs/dag-sync.log 2>&1;
           echo '--- [$(date)] DAG sync completed ---' >> /opt/airflow/logs/dag-sync.log;
+
+
+          echo '--- [$(date)] Starting LOG sync ---' >> /opt/airflow/logs/dag-sync.log;
+          gsutil -m rsync -r /opt/airflow/logs gs://${GCS_BUCKET}/logs >> /opt/airflow/logs/dag-sync.log 2>&1;
+          echo '--- [$(date)] LOG sync completed ---' >> /opt/airflow/logs/dag-sync.log;
+
           sleep 60;
         done
       "
@@ -184,6 +190,7 @@ services:
 
 EOF
 
+
 # Start Airflow services
 
 cd /opt/airflow
@@ -198,4 +205,41 @@ sleep 60
 echo "Retrying docker compose up..."
 docker compose up -d
 
+# Wait for webserver
+echo "Waiting for Airflow Webserver to be ready..."
+until curl --silent --output /dev/null --head --fail http://localhost:8080/health; do
+  sleep 5
+done
+
+echo "Airflow is up and running."
 echo "Airflow setup completed."
+
+# --- Create systemd service for Airflow ---
+
+echo "[INFO] Creating systemd service for Airflow..."
+
+cat <<EOF > /etc/systemd/system/airflow.service
+[Unit]
+Description=Airflow Docker Compose Service
+Requires=docker.service
+After=docker.service network.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+WorkingDirectory=/opt/airflow
+ExecStart=/usr/bin/docker compose up -d
+ExecStop=/usr/bin/docker compose down
+TimeoutStartSec=0
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+# Reload systemd and enable service
+systemctl daemon-reexec
+systemctl daemon-reload
+systemctl enable airflow.service
+systemctl start airflow.service
+
+echo "[INFO] systemd airflow.service enabled and started."
