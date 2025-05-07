@@ -1,5 +1,5 @@
 resource "google_secret_manager_secret" "db_user" {
-  secret_id = "db-username"
+  secret_id = var.db_username_secret_id
   replication {
     auto {}
   }
@@ -17,7 +17,7 @@ resource "google_secret_manager_secret_iam_member" "db_user_access" {
 }
 
 resource "google_secret_manager_secret" "db_password" {
-  secret_id = "db-password"
+  secret_id = var.db_password_secret_id
   replication {
     auto {}
   }
@@ -49,7 +49,6 @@ resource "google_sql_database_instance" "airflow" {
     }
   }
 }
-
 resource "google_sql_user" "airflow" {
   name     = var.db_user
   password = var.db_password
