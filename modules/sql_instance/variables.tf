@@ -22,3 +22,12 @@ variable "airflow_sa_email" {
   description = "Airflow service account email for granting access"
   type        = string
 }
+variable "db_username_secret_id" {
+  description = "Secret ID for the database username"
+  type        = string
+}
+
+variable "db_password_secret_id" {
+  description = "Secret ID for the database password"
+  type        = string
+}
