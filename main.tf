@@ -44,6 +44,10 @@ module "sql_instance" {
   db_user          = var.db_user
   db_password      = var.db_password
   airflow_sa_email = module.service_account.email
+  db_username_secret_id = var.db_username_secret_id
+  db_password_secret_id = var.db_password_secret_id
+
+
 }
 
 
