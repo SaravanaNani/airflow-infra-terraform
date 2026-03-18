@@ -1,4 +1,4 @@
-project_id  = "adq-get-project"
+project_id  = "$YOUR_PROJECT_ID"
 region      = "us-central1"
 vpc_name    = "airflow-vpct"
 subnet_name = "airflow-subnett"
